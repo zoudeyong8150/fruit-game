@@ -1,0 +1,358 @@
+/* 添加自定义颜色替代Tailwind配置 */
+:root {
+  --color-primary: #3B82F6;
+  --color-secondary: #10B981;
+  --color-accent: #F59E0B;
+  --color-danger: #EF4444;
+  --color-dark: #1F2937;
+  --color-light: #F3F4F6;
+  --color-indigo-500: #6366f1;
+}
+
+/* 游戏封面背景渐变 */
+.bg-dark-gradient {
+  background: linear-gradient(135deg, #111827, #1e293b);
+}
+
+/* 游戏头部渐变背景 */
+.game-header {
+  background: linear-gradient(to right, var(--color-primary), var(--color-indigo-500));
+}
+
+/* 开始游戏按钮 */
+.start-button {
+  background: linear-gradient(to right, var(--color-primary), var(--color-indigo-500));
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.start-button:hover {
+  background: linear-gradient(to right, #2563eb, #4f46e5);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+}
+
+/* 封面页游戏标题 */
+.game-title {
+  text-shadow: 0 2px 10px rgba(59, 130, 246, 0.6);
+  background: linear-gradient(to right, #fff, #e0e7ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 1px;
+}
+
+/* 介绍卡片悬停效果 */
+.intro-card {
+  transition: all 0.3s ease;
+  transform: translateZ(0);
+}
+
+.intro-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* 介绍文字动画 */
+.intro-text {
+  animation: fadeIn 1s ease-out;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 浮动水果动画 */
+.floating-fruits {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+.fruit-emoji {
+  position: absolute;
+  font-size: 36px;
+  animation: floatingFruit 15s linear infinite;
+  opacity: 0.7;
+}
+
+.fruit-emoji:nth-child(1) {
+  top: 10%;
+  left: 10%;
+  animation-duration: 15s;
+  animation-delay: 0s;
+}
+
+.fruit-emoji:nth-child(2) {
+  top: 60%;
+  left: 80%;
+  animation-duration: 25s;
+  animation-delay: 2s;
+}
+
+.fruit-emoji:nth-child(3) {
+  top: 80%;
+  left: 20%;
+  animation-duration: 18s;
+  animation-delay: 5s;
+}
+
+.fruit-emoji:nth-child(4) {
+  top: 30%;
+  left: 90%;
+  animation-duration: 22s;
+  animation-delay: 7s;
+}
+
+.fruit-emoji:nth-child(5) {
+  top: 80%;
+  left: 60%;
+  animation-duration: 20s;
+  animation-delay: 4s;
+}
+
+@keyframes floatingFruit {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-100px, 50px) rotate(90deg);
+  }
+  50% {
+    transform: translate(-50px, 100px) rotate(180deg);
+  }
+  75% {
+    transform: translate(100px, 50px) rotate(270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.bg-accent {
+  background-color: var(--color-accent);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.bg-danger {
+  background-color: var(--color-danger);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+.bg-dark {
+  background-color: var(--color-dark);
+}
+
+.text-dark {
+  color: var(--color-dark);
+}
+
+.bg-light {
+  background-color: var(--color-light);
+}
+
+.text-light {
+  color: var(--color-light);
+}
+
+.font-inter {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* 修复透明度问题 */
+.bg-primary\/10 {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.bg-secondary\/10 {
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+/* 自定义工具类 */
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .text-shadow-lg {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+  }
+  .animate-scale {
+    animation: scale 0.3s ease-in-out;
+  }
+  @keyframes scale {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+}
+
+/* 自定义动画和工具类 */
+
+@keyframes scorePopup {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-30px); opacity: 0; }
+}
+
+.modal-enter {
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content-enter {
+  animation: slideUp 0.3s forwards;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+button {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.fruit-hit {
+  animation: fruitPop 0.3s forwards;
+}
+
+@keyframes fruitPop {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+/* 防止触摸时选择文本 */
+canvas, button, .game-container {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 画布响应式样式 */
+#gameCanvas {
+  width: 100% !important;
+  height: 500px !important;
+  touch-action: manipulation;
+  cursor: pointer;
+  display: block;
+}
+
+/* 移动设备优化 */
+@media (max-width: 640px) {
+  #gameCanvas {
+    height: 400px !important;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}
+
+/* 自定义圆角样式 */
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+/* 过渡效果 */
+.transition-opacity {
+  transition-property: opacity;
+}
+
+.transition-all {
+  transition-property: all;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.duration-500 {
+  transition-duration: 500ms;
+}
+
+.scale-95 {
+  transform: scale(0.95);
+}
+
+.scale-100 {
+  transform: scale(1);
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-100 {
+  opacity: 1;
+}
+
+/* 得分弹出动画 */
+.score-popup {
+  position: absolute;
+  color: #4ade80;
+  font-weight: bold;
+  font-size: 16px;
+  pointer-events: none;
+  z-index: 20;
+  animation: scorePopup 0.8s forwards;
+}
+
+@keyframes scorePopup {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-30px); opacity: 0; }
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>水果快切</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- 预加载音频资源 -->
+  <audio id="clickSound" preload="auto" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADwAD///////////////////////////////////////////8AAAA4TEFNRTMuMTAwAc0AAAAAAAAAABSAJAJAQgAAgAAAA8DcdCgWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=" type="audio/mp3"></audio>
+  <audio id="failSound" preload="auto" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADwAD///////////////////////////////////////////8AAAA8TEFNRTMuMTAwAc0AAAAAAAAAABSAJAJAQgAAgAAAA8DcdCgWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=" type="audio/mp3"></audio>
+  <audio id="gameOverSound" preload="auto" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADwAD///////////////////////////////////////////8AAAA8TEFNRTMuMTAwAc0AAAAAAAAAABSAJAJAQgAAgAAAA8DcdCgWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=" type="audio/mp3"></audio>
+</head>
+<body class="font-inter bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex flex-col items-center justify-center p-4 overflow-x-hidden">
+  <!-- 装饰元素 -->
+  <div class="absolute -top-20 -left-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl"></div>
+  <div class="absolute -bottom-32 -right-20 w-60 h-60 bg-secondary/10 rounded-full blur-3xl"></div>
+
+  <!-- 游戏容器 -->
+  <div class="relative max-w-md w-full bg-white/80 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden transition-all duration-500 transform hover:shadow-2xl">
+    <!-- 游戏头部 -->
+    <div class="game-header text-white p-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold tracking-tight text-shadow-lg">
+        <i class="fa fa-gamepad mr-2"></i>水果快切
+      </h1>
+      <div class="flex items-center space-x-2">
+        <div class="flex items-center">
+          <i class="fa fa-star text-yellow-300"></i>
+          <span class="ml-1 font-medium" id="bestScore">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 游戏引导层 -->
+    <div id="gameIntro" class="absolute inset-0 bg-dark-gradient flex flex-col items-center justify-center p-6 z-30 transition-all duration-500">
+      <div class="floating-fruits">
+        <span class="fruit-emoji">🍎</span>
+        <span class="fruit-emoji">🍊</span>
+        <span class="fruit-emoji">🍉</span>
+        <span class="fruit-emoji">🍇</span>
+        <span class="fruit-emoji">🍓</span>
+      </div>
+      
+      <div class="text-center mb-8">
+        <h2 class="text-4xl font-bold text-white mb-2 animate-float game-title">水果快切</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-yellow-400 to-red-500 mx-auto mb-4 rounded-full"></div>
+        <p class="text-gray-200 mb-6 intro-text">点击掉落的水果得分，错过水果扣分<br>时间有限，抓紧行动！</p>
+      </div>
+
+      <div class="space-y-4 mb-8 w-full max-w-xs">
+        <div class="flex items-center p-4 intro-card rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
+          <div class="text-3xl mr-4">🍎</div>
+          <div>
+            <h3 class="font-medium text-white">点击水果</h3>
+            <p class="text-gray-300 text-sm">+10 分</p>
+          </div>
+        </div>
+        <div class="flex items-center p-4 intro-card rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
+          <div class="text-3xl mr-4">⏳</div>
+          <div>
+            <h3 class="font-medium text-white">错过水果</h3>
+            <p class="text-gray-300 text-sm">-5 分</p>
+          </div>
+        </div>
+      </div>
+
+      <button id="startGameBtn" class="start-button w-full text-white py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center">
+        <i class="fa fa-play-circle mr-2"></i>开始游戏
+      </button>
+    </div>
+
+    <!-- 游戏区域 -->
+    <div class="relative p-4">
+      <div class="relative bg-white rounded-xl shadow-md overflow-hidden">
+        <canvas id="gameCanvas" class="w-full h-[500px]"></canvas>
+
+        <!-- 游戏数据显示 -->
+        <div class="absolute top-3 left-3 flex space-x-3 z-10">
+          <div id="scoreDisplay" class="bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-medium shadow-sm flex items-center">
+            <i class="fa fa-trophy text-accent mr-1.5"></i>
+            <span id="score">0</span>
+          </div>
+          <div id="timeDisplay" class="bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-medium shadow-sm flex items-center">
+            <i class="fa fa-clock-o text-primary mr-1.5"></i>
+            <span id="time">30</span>s
+          </div>
+        </div>
+      </div>
+
+      <!-- 难度指示器 -->
+      <div class="mt-3 flex items-center justify-between">
+        <span class="text-sm text-gray-500">难度</span>
+        <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div id="difficultyBar" class="h-full bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 w-1/3 transition-all duration-500"></div>
+        </div>
+        <span id="difficultyText" class="text-sm text-gray-500">简单</span>
+      </div>
+    </div>
+
+    <!-- 控制按钮 -->
+    <div class="p-4 flex justify-center gap-4">
+      <button id="resetBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+        <i class="fa fa-refresh mr-2"></i>重置
+      </button>
+      <button id="soundBtn" class="w-12 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+        <i class="fa fa-volume-up" id="soundIcon"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- 游戏结束弹窗 -->
+  <div id="gameOverModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4 transform transition-all duration-500 scale-95 opacity-0" id="modalContent">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
+          <i class="fa fa-times text-2xl text-red-500"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">游戏结束!</h2>
+        <p class="text-gray-500">你的得分: <span id="finalScore" class="font-bold text-primary">0</span></p>
+      </div>
+
+      <div class="space-y-3 mb-6">
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span class="text-gray-600">点击水果</span>
+          <span id="fruitsClicked" class="font-medium">0</span>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span class="text-gray-600">错过水果</span>
+          <span id="fruitsMissed" class="font-medium">0</span>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span class="text-gray-600">最高分</span>
+          <span id="bestScoreDisplay" class="font-bold text-accent">0</span>
+        </div>
+      </div>
+
+      <button id="playAgainBtn" class="start-button w-full text-white py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
+        <i class="fa fa-repeat mr-2"></i>再玩一次
+      </button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
